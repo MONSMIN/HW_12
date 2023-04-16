@@ -88,12 +88,12 @@ def change(*args):
     return f'Contact {name.value} updated {str(phone_number[0])}'
 
 
-def save(contacts, filename="contacts.bin"):
+def save(contacts, filename="contacts.txt"):
     with open(filename, "wb") as f:
         pickle.dump(contacts, f)
     print(f"Contacts saved to {filename}")
 
-def load(filename="contacts.bin"):
+def load(filename="contacts.txt"):
     with open(filename, 'rb') as f:
         contacts = pickle.load(f)
     print(f"Contacts loaded from {filename}")
