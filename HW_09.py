@@ -138,13 +138,15 @@ def command_handler(text):
 
 def main():
     print('Hello user!')
+    load(contacts)
     while True:
         
         user_input = input('>>>')
         command, data = command_handler(user_input)
 
         print(command(data))
-    
+
+        
 
         if user_input == 'exit':
             save(contacts) 
@@ -153,26 +155,26 @@ def main():
 
 if __name__ == '__main__':
 
-    record = Record(Name("Marina"), [Phone("380993456789")], Birthday("15.05.1995"))
-    record1 = Record(Name("Petro"), [Phone("380977654321")], Birthday("10.10.1988"))
-    record2 = Record(Name("Olena"), [Phone("380994567890")], Birthday("20.06.1987"))
-    record3 = Record(Name("Serg"), [Phone("380956789012")], Birthday("07.12.1990"))
-    record4 = Record(Name("Lydmila"), [Phone("380983456789")], Birthday("23.08.1992"))
-    record5 = Record(Name("Sanya"), [Phone("380963210987")], Birthday("02.03.1983"))
-    record6 = Record(Name("Vasya"), [Phone("380977890123")], Birthday("18.09.1998"))
-    record7 = Record(Name("Oleg"), [Phone("380954321098")], Birthday("25.11.1985"))
-    record8 = Record(Name("Tanya"), [Phone("380979012345")], Birthday("12.07.1991"))
+    # record = Record(Name("Marina"), [Phone("380993456789")], Birthday("15.05.1995"))
+    # record1 = Record(Name("Petro"), [Phone("380977654321")], Birthday("10.10.1988"))
+    # record2 = Record(Name("Olena"), [Phone("380994567890")], Birthday("20.06.1987"))
+    # record3 = Record(Name("Serg"), [Phone("380956789012")], Birthday("07.12.1990"))
+    # record4 = Record(Name("Lydmila"), [Phone("380983456789")], Birthday("23.08.1992"))
+    # record5 = Record(Name("Sanya"), [Phone("380963210987")], Birthday("02.03.1983"))
+    # record6 = Record(Name("Vasya"), [Phone("380977890123")], Birthday("18.09.1998"))
+    # record7 = Record(Name("Oleg"), [Phone("380954321098")], Birthday("25.11.1985"))
+    # record8 = Record(Name("Tanya"), [Phone("380979012345")], Birthday("12.07.1991"))
     
     
-    contacts.add_record(record)
-    contacts.add_record(record1)
-    contacts.add_record(record2)
-    contacts.add_record(record3)
-    contacts.add_record(record4)
-    contacts.add_record(record5)
-    contacts.add_record(record6)
-    contacts.add_record(record7)
-    contacts.add_record(record8)
+    # contacts.add_record(record)
+    # contacts.add_record(record1)
+    # contacts.add_record(record2)
+    # contacts.add_record(record3)
+    # contacts.add_record(record4)
+    # contacts.add_record(record5)
+    # contacts.add_record(record6)
+    # contacts.add_record(record7)
+    # contacts.add_record(record8)
 
 
     main()
