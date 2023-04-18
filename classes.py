@@ -119,10 +119,16 @@ class AddressBook(UserDict):
         with open(self.filename, 'wb') as file:
             pickle.dump(self, file)
 
-    @classmethod
-    def load_from_file(cls, filename):
+    
+    def load_from_file(self, filename):
         with open(filename, 'rb') as file:
             return pickle.load(file)
+    
+    def __getstate__(self):
+        return self.__dict__
+
+    def __setstate__(self, state):
+        self.__dict__ = state
             
             
 
