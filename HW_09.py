@@ -88,13 +88,13 @@ def change(*args):
     return f'Contact {name.value} updated {str(phone_number[0])}'
 
 
-def save(filename):
-    with open("contacts.bin", "wb") as f:
+def save(contacts, filename):
+    with open(filename, "wb") as f:
         pickle.dump(contacts, f)
     print(f"Contacts saved to {filename}")
 
 def load(filename):
-    with open('contacts.bin', 'rb') as f:
+    with open(filename, 'rb') as f:
         pickle.load(f)
     print(f"Contacts loaded from {filename}")
     
@@ -140,7 +140,7 @@ def command_handler(text):
 
 def main():
     print('Hello user!')
-    load(contacts)
+    contacts = load('contacts.bin')
     while True:
         
         user_input = input('>>>')
@@ -151,7 +151,7 @@ def main():
         
 
         if user_input == 'exit':
-            # save(contacts) 
+            save(contacts, 'contacts.bin') 
             break 
             
 
