@@ -1,7 +1,10 @@
 from collections import UserDict
-from datetime import datetime, timedelta, date
+from datetime import datetime
 from itertools import islice
+import re
 import pickle
+import os
+
 
 class Field:
     def __init__(self, value):
@@ -115,21 +118,41 @@ class AddressBook(UserDict):
             yield result
             start += page
 
-    def save_to_file(self):
-        with open(self.filename, 'wb') as file:
+    def save_to_file(self, filename):
+        with open(filename, 'wb') as file:
             pickle.dump(self, file)
+        return "AddressBook save successful"
 
     
     def load_from_file(self, filename):
-        with open(filename, 'rb') as file:
-            return pickle.load(file)
+        if os.path.exists(filename):
+            with open(filename, 'rb') as file:
+                self.data = pickle.load(file)
+            return "AddressBook load successful"
     
+
     def __getstate__(self):
         return self.__dict__
 
+
     def __setstate__(self, state):
         self.__dict__ = state
-            
-            
 
+    
+    def search_by_name(self, name):
+        result = []
+        for record in self.data.values():
+            if name.lower() in record.name.value.lower():
+                result.append(record)
+        return result
+    
 
+    def search_by_phone(self, phone):
+        result = []
+        pattern = re.compile(phone)
+        for record in self.data.values():
+            for ph in record.phones:
+                if pattern.search(ph.value):
+                    result.append(record)
+                    break
+        return result

@@ -2,6 +2,7 @@ from classes import AddressBook, Record, Name, Phone, Birthday
 from datetime import date
 import pickle
 
+
 contacts = AddressBook()
 
 
@@ -38,6 +39,7 @@ def add(*args):
         return f'{name}, {phone_numbers[0]}'
     return f'{name},{phone_numbers[0]},{birthday}'
 
+    return None
 
 def show_all(*args, contacts=contacts):
     if not contacts.data:
@@ -51,17 +53,44 @@ def show_all(*args, contacts=contacts):
         else:
             contact_list.append(f"{name} {phones}, Date of birth is not specified")
 
-    page = args[0]
+    try:
+        page = int(args[0])
+        if not page:
+            return "\n".join(contact_list)
+        
+        for records in contacts.iterator(str(page)):
+            for name, record in records:
+                phones = ', '.join(str(phone) for phone in record.phone)
+                days_to_birthday = f"days to birthday: {record.days_to_birthday()}" if record.birthday else ""
+                print(f"{name} {phones} {days_to_birthday}")
+            print('*' * 100)
+    except (IndexError, ValueError):
+        return 'Invalid page number'
 
-    if not page:
-        return "\n".join(contact_list)
+
+# def show_all(*args, contacts=contacts):
+#     if not contacts.data:
+#         return 'No contacts'
     
-    for records in contacts.iterator(int(page)):
-        for name, record in records:
-            phones = ', '.join(str(phone) for phone in record.phone)
-            days_to_birthday = f"days to birthday: {record.days_to_birthday()}" if record.birthday else ""
-            print(f"{name} {phones} {days_to_birthday}")
-        print('*' * 100)
+#     contact_list = []
+#     for name, record in contacts.data.items():
+#         phones = ', '.join(str(phone) for phone in record.phone)
+#         if record.birthday:
+#             contact_list.append(f"{name} {phones} days to birthday: {record.days_to_birthday()}")
+#         else:
+#             contact_list.append(f"{name} {phones}, Date of birth is not specified")
+
+#     page = args[0]
+
+#     if not page:
+#         return "\n".join(contact_list)
+    
+#     for records in contacts.iterator(str(page)):
+#         for name, record in records:
+#             phones = ', '.join(str(phone) for phone in record.phone)
+#             days_to_birthday = f"days to birthday: {record.days_to_birthday()}" if record.birthday else ""
+#             print(f"{name} {phones} {days_to_birthday}")
+#         print('*' * 100)
     
 
 @input_error
@@ -89,7 +118,7 @@ def change(*args):
 
 
 def save(contacts, filename):
-    with open(filename, "wb") as f:
+    with open(filename, mode="a") as f:
         pickle.dump(contacts, f)
     print(f"Contacts saved to {filename}")
 
@@ -97,7 +126,16 @@ def load(filename):
     with open(filename, 'rb') as f:
         pickle.load(f)
     print(f"Contacts loaded from {filename}")
-    
+
+
+def search_contacts(name):
+    name = Name(name)
+    f_contacts = contacts.search_by_name(name.value)
+    result = []
+    if f_contacts:
+        for contact in f_contacts:
+            result.append(f"{contact.name.value} Phone: {contact.phone[0].value} days to birthday: {contact.days_to_birthday()}")
+    return "\n".join(result)
 
 
 def exit(*args):
@@ -124,7 +162,8 @@ COMMANDS = {help: 'help',
             change: 'change',
             save: 'save',
             load: 'load',
-            exit: 'exit'
+            exit: 'exit',
+            search_contacts: 'search'
             }
 
 
@@ -140,7 +179,7 @@ def command_handler(text):
 
 def main():
     print('Hello user!')
-    contacts = load('contacts.bin')
+    print(contacts.load_from_file('contacts.bin'))
     while True:
         
         user_input = input('>>>')
@@ -151,7 +190,7 @@ def main():
         
 
         if user_input == 'exit':
-            save(contacts, 'contacts.bin') 
+            print(contacts.save_to_file('contacts.bin')) 
             break 
             
 
