@@ -1,9 +1,9 @@
+import os
+import pickle
 from collections import UserDict
 from datetime import datetime
 from itertools import islice
 import re
-import pickle
-import os
 
 
 class Field:
