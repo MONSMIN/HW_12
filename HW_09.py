@@ -19,7 +19,7 @@ def input_error(func):
             return 'Not enough params. Print help'
     return inner
 
-
+# Додавання контакта до книги
 @input_error
 def add(*args):
     list_of_param = args[0].split()
@@ -39,7 +39,7 @@ def add(*args):
         return f'{name}, {phone_numbers[0]}'
     return f'{name},{phone_numbers[0]},{birthday}'
 
-
+# Показ усіх контактів
 def show_all(*args):
     if not contacts.data:
         return 'No contacts'
@@ -62,7 +62,7 @@ def show_all(*args):
             print(f"{name} {phones} {days_to_birthday}")
         print('*' * 100)
     
-
+# Виклик по імені показ номера телеофна 
 @input_error
 def phone(*args):
     list_of_param = args[0].split()
@@ -72,7 +72,7 @@ def phone(*args):
     phone_number = record.phone[0]
     return f'{phone_number}'
 
-
+#заміна номера по контакту
 @input_error
 def change(*args):
     list_of_param = args[0].split()
@@ -86,26 +86,36 @@ def change(*args):
     record.phone = phone_number
     return f'Contact {name.value} updated {str(phone_number[0])}'
 
-
+# Зберігання книги в файл
 def save(contacts, filename):
     with open(filename, mode="a") as f:
         pickle.dump(contacts, f)
-    print(f"Contacts saved to {filename}")
-
+    
+# Завантаження з файлу
 def load(filename):
     with open(filename, 'rb') as f:
         pickle.load(f)
-    print(f"Contacts loaded from {filename}")
+    
 
-
-def search_contacts(name):
-    name = Name(name)
-    f_contacts = contacts.search_by_name(name.value)
-    result = []
-    if f_contacts:
-        for contact in f_contacts:
-            result.append(f"{contact.name.value} Phone: {contact.phone[0].value} days to birthday: {contact.days_to_birthday()}")
-    return "\n".join(result)
+# Пошук по літерам або числам в книзі
+def search_contacts(query):
+    if query.isnumeric():
+        phone_numbers = contacts.search_by_phone(query)
+        result = []
+        if phone_numbers:
+            for contact in phone_numbers:
+                result.append(f"{contact.name.value} Phone: {contact.phone[0].value} days to birthday: {contact.days_to_birthday()}")
+        return "\n".join(result)
+    else:
+        name = Name(query)
+        f_contacts = contacts.search_by_name(name.value)
+        result = []
+        if f_contacts:
+            for contact in f_contacts:
+                result.append(f"{contact.name.value} Phone: {contact.phone[0].value} days to birthday: {contact.days_to_birthday()}")
+            return "\n".join(result)
+        else:
+            return "Not found contacts"
 
 
 def exit(*args):
@@ -137,7 +147,6 @@ COMMANDS = {help: 'help',
             }
 
 
-
 def command_handler(text):
     for command, kword in COMMANDS.items():
         if text.startswith(kword):
@@ -151,13 +160,10 @@ def main():
     print('Hello user!')
     print(contacts.load_from_file('contacts.bin'))
     while True:
-        
         user_input = input('>>>')
         command, data = command_handler(user_input)
 
         print(command(data))
-
-        
 
         if user_input == 'exit':
             print(contacts.save_to_file('contacts.bin')) 

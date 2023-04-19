@@ -163,7 +163,7 @@ class AddressBook(UserDict):
         result = []
         pattern = re.compile(phone)
         for record in self.data.values():
-            for ph in record.phones:
+            for ph in record.phone:
                 if pattern.search(ph.value):
                     result.append(record)
                     break
