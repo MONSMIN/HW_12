@@ -105,8 +105,13 @@ class Record:
 
 
 class AddressBook(UserDict):
-    def __iter__(self):
-        return self.data
+    def __init__(self):
+        self.data = {}
+
+    def __len__(self):
+        if self.data is None:
+            return 0
+        return len(self.data)
 
     def add_record(self, record):
         self.data[record.name.value] = record
@@ -129,8 +134,13 @@ class AddressBook(UserDict):
     def load_from_file(self, filename):
         if os.path.exists(filename):
             with open(filename, 'rb') as file:
-                self.data = pickle.load(file)
+                data = pickle.load(file)
+                if data:
+                    self.data = data
+                else:
+                    self.data = {}
             return "AddressBook load successful"
+        
     
 
     def __getstate__(self):
