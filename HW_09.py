@@ -40,29 +40,14 @@ def add(*args):
     return f'{name},{phone_numbers[0]},{birthday}'
 
 
-def show_all(*args, contacts=contacts):
-    if not contacts.data:
-        return 'No contacts'
-    
-    contact_list = []
-    for name, record in contacts.data.items():
-        phones = ', '.join(str(phone) for phone in record.phone)
-        if record.birthday:
-            contact_list.append(f"{name} {phones} days to birthday: {record.days_to_birthday()}")
-        else:
-            contact_list.append(f"{name} {phones}, Date of birth is not specified")
-
-    page = args[0]
-
-    if not page:
-        return "\n".join(contact_list)
-    
-    for records in contacts.iterator(int(page)):
-        for name, record in records:
-            phones = ', '.join(str(phone) for phone in record.phone)
-            days_to_birthday = f"days to birthday: {record.days_to_birthday()}" if record.birthday else ""
-            print(f"{name} {phones} {days_to_birthday}")
-        print('*' * 100)
+def show_all(*args):
+    phones_lst = []
+    if len(contacts.data) == 0:
+        return "There are no contacts in the phone book yet!"
+    for k, v in contacts.data.items():
+        rec = contacts.data[k]
+        phones_lst.append(f"{k}: {', '.join(str(num) for num in record.phone)}")
+    return "\n".join([f"{item}" for item in phones_lst])
 
     
 

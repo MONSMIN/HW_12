@@ -105,7 +105,9 @@ class Record:
 
 
 class AddressBook(UserDict):
-    
+    def __iter__(self):
+        return self.data
+
     def add_record(self, record):
         self.data[record.name.value] = record
 
