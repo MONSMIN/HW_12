@@ -127,7 +127,11 @@ class AddressBook(UserDict):
     def load_from_file(self, filename):
         if os.path.exists(filename):
             with open(filename, 'rb') as file:
-                self.data = pickle.load(file)
+                data = pickle.load(file)
+                if data:
+                    self.data = data
+                else:
+                    self.data = {}
             return "AddressBook load successful"
     
 

@@ -40,7 +40,7 @@ def add(*args):
     return f'{name},{phone_numbers[0]},{birthday}'
 
 
-def show_all(*args, contacts=contacts):
+def show_all(*args):
     if not contacts.data:
         return 'No contacts'
     
@@ -189,7 +189,6 @@ if __name__ == '__main__':
     contacts.add_record(record6)
     contacts.add_record(record7)
     contacts.add_record(record8)
-
 
     main()
     
