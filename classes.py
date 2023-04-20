@@ -47,7 +47,7 @@ class Phone(Field):
     @value.setter
     def value(self, phone):
         if phone.isnumeric() and len(phone) == 12:
-            self._value = phone
+            self.value = phone
         else:
             raise ValueError("Phone number must contain only 12 digits.")
 
@@ -59,12 +59,19 @@ class Birthday(Field):
     def __str__(self):
         return "Birthday: " + (super().__str__() if self.value else '')
 
-    def  value(self, value):
+    @property
+    def value(self):
+        return self.__dict__.get('value')
+    
+    @value.setter
+    def value(self, value):
         try:
             datetime.strptime(value, '%d.%m.%Y')
         except ValueError:
             raise ValueError("Incorrect date format, should be dd.mm.yyyy")
-        self._value = value
+        self.__dict__['value'] = value
+
+
 
 
 class Record:
@@ -140,31 +147,20 @@ class AddressBook(UserDict):
                 else:
                     self.data = {}
             return "AddressBook load successful"
-        
-    
-
-    def __getstate__(self):
-        return self.__dict__
-
-
-    def __setstate__(self, state):
-        self.__dict__ = state
 
     
-    def search_by_name(self, name):
+    def search(self, query):
         result = []
-        for record in self.data.values():
-            if name.lower() in record.name.value.lower():
-                result.append(record)
-        return result
-    
-
-    def search_by_phone(self, phone):
-        result = []
-        pattern = re.compile(phone)
-        for record in self.data.values():
-            for ph in record.phone:
-                if pattern.search(ph.value):
+        if query.isnumeric():
+            pattern = re.compile(query)
+            for record in self.data.values():
+                for ph in record.phone:
+                    if pattern.search(ph.value):
+                        result.append(record)
+                        break
+        else:
+            name = Name(query)
+            for record in self.data.values():
+                if name.value.lower() in record.name.value.lower():
                     result.append(record)
-                    break
         return result

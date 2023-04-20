@@ -98,17 +98,17 @@ def load(filename):
     
 
 # Пошук по літерам або числам в книзі
-def search_contacts(query):
-    if query.isnumeric():
-        phone_numbers = contacts.search_by_phone(query)
+def search_contacts(*args):
+    if args[0].isnumeric():
+        phone_numbers = contacts.search(*args)
         result = []
         if phone_numbers:
             for contact in phone_numbers:
                 result.append(f"{contact.name.value} Phone: {contact.phone[0].value} days to birthday: {contact.days_to_birthday()}")
         return "\n".join(result)
     else:
-        name = Name(query)
-        f_contacts = contacts.search_by_name(name.value)
+        name = Name(*args)
+        f_contacts = contacts.search(name.value)
         result = []
         if f_contacts:
             for contact in f_contacts:
